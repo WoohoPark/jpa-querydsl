@@ -28,7 +28,9 @@ public class Item {
 
     private int price;
 
-    @Column(name = "STOCK_QUANITY", nullable = false)
+    @Column(name = "STOCK_QUANITY")
     private int stockQuanity;
 
+    @OneToMany(mappedBy = "item")
+    private List<CategoryItem> categoryItems;
 }

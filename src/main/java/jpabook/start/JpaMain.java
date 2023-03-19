@@ -16,7 +16,7 @@ public class JpaMain {
         try {
             tx.begin(); //트랜잭션 시작
             before(em);  //비즈니스 로직
-            logic(em);
+            //logic(em);
             tx.commit();//트랜잭션 커밋
         } catch (Exception e) {
             e.printStackTrace();
@@ -31,8 +31,8 @@ public class JpaMain {
     public static void before(EntityManager em) {
 
         Member member = Member.builder()
-                            .name("회원1")
-                            .city("Seoul").street("JongRo").zipcode("123-1").build();
+                            .name("회원2")
+                            .city("Daegu").street("Yulhaseoro").zipcode("321-1").build();
         em.persist(member);
         System.out.println("====================================== Member 등록");
 
@@ -45,10 +45,9 @@ public class JpaMain {
         System.out.println("====================================== Order 등록");
 
         Item item = Item.builder()
-                .name("상품")
+                .name("치킨")
                 .price(1000)
                 .stockQuanity(10)
-                .orderItems(null)
                 .build();
         em.persist(item);
         System.out.println("====================================== Item 등록");
@@ -61,6 +60,30 @@ public class JpaMain {
                 .build();
         em.persist(orderItem);
         System.out.println("====================================== OrderItem 등록");
+
+        Delivery delivery = Delivery.builder()
+                .city("Daegu")
+                .street("jongro")
+                .zipcode("101-1")
+                .status(DeliveryStatus.READY)
+                .order(order)
+                .build();
+        em.persist(delivery);
+        order.setDelivery(delivery);
+        System.out.println("====================================== Delivery 등록");
+
+        Category category = Category.builder()
+                .name("튀김")
+                .build();
+        em.persist(category);
+        System.out.println("====================================== Category 등록");
+
+        CategoryItem categoryItem = CategoryItem.builder()
+                .category(category)
+                .item(item)
+                .build();
+        em.persist(categoryItem);
+        System.out.println("====================================== Category Item 등록");
 
     }
     public static void logic(EntityManager em) {
