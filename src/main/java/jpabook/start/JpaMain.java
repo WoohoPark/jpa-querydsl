@@ -1,28 +1,23 @@
 package jpabook.start;
 
-import javax.persistence.*;
-import java.util.List;
+import jpabook.start.domain.*;
 
-/**
- * @author holyeye
- */
+import javax.persistence.*;
+import java.util.Date;
+
 public class JpaMain {
 
     public static void main(String[] args) {
-
         //엔티티 매니저 팩토리 생성
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("jpabook");
         EntityManager em = emf.createEntityManager(); //엔티티 매니저 생성
-
         EntityTransaction tx = em.getTransaction(); //트랜잭션 기능 획득
 
         try {
-
-
             tx.begin(); //트랜잭션 시작
-            logic(em);  //비즈니스 로직
+            before(em);  //비즈니스 로직
+            logic(em);
             tx.commit();//트랜잭션 커밋
-
         } catch (Exception e) {
             e.printStackTrace();
             tx.rollback(); //트랜잭션 롤백
@@ -33,30 +28,52 @@ public class JpaMain {
         emf.close(); //엔티티 매니저 팩토리 종료
     }
 
+    public static void before(EntityManager em) {
+
+        Member member = Member.builder()
+                            .name("회원1")
+                            .city("Seoul").street("JongRo").zipcode("123-1").build();
+        em.persist(member);
+        System.out.println("====================================== Member 등록");
+
+        Order order = Order.builder()
+                .orderDate(new Date())
+                .status(OrderStatus.ORDER)
+                .member(member)
+                .build();
+        em.persist(order);
+        System.out.println("====================================== Order 등록");
+
+        Item item = Item.builder()
+                .name("상품")
+                .price(1000)
+                .stockQuanity(10)
+                .orderItems(null)
+                .build();
+        em.persist(item);
+        System.out.println("====================================== Item 등록");
+
+        OrderItem orderItem = OrderItem.builder()
+                .order(order)
+                .item(item)
+                .orderPrice(item.getPrice())
+                .count(1)
+                .build();
+        em.persist(orderItem);
+        System.out.println("====================================== OrderItem 등록");
+
+    }
     public static void logic(EntityManager em) {
 
-        String id = "id1";
-        Member member = new Member();
-        member.setId(id);
-        member.setUsername("지한");
-        member.setAge(2);
+        long orderId = 2L;
 
-        //등록
-        em.persist(member);
+        Order order = em.find(Order.class,orderId);
+        Member meber = order.getMember();
+        System.out.println("MEMBER GET NAME : " + meber.getName());
 
-        //수정
-        member.setAge(20);
-
-        //한 건 조회
-        Member findMember = em.find(Member.class, id);
-        System.out.println("findMember=" + findMember.getUsername() + ", age=" + findMember.getAge());
-
-        //목록 조회
-        List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-        System.out.println("members.size=" + members.size());
-
-        //삭제
-        em.remove(member);
+        OrderItem orderItem = order.getOrderItems().get(0);
+        Item item = orderItem.getItem();
+        System.out.println("ITEM GET PRICE : " + item.getPrice());
 
     }
 }

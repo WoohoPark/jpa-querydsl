@@ -1,11 +1,19 @@
 package jpabook.start.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@Builder
+@NoArgsConstructor
+@Table(name = "ITEM")
 public class Item {
 
     @Id
@@ -14,7 +22,13 @@ public class Item {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "item")
+    private List<OrderItem> orderItems;
+
     private int price;
-    private int stockQuantity;
+
+    @Column(name = "STOCK_QUANITY", nullable = false)
+    private int stockQuanity;
 
 }
