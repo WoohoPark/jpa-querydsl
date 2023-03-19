@@ -1,9 +1,12 @@
 package jpabook.start.domain;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@Data
 public class Order {
 
     @Id
@@ -11,7 +14,6 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
 
-    //@ForeignKey(value = Member.class,foreignKeyDefinition = 1)
     @Column(name = "MEMBER_ID")
     private Long memberId;
 

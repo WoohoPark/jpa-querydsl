@@ -1,11 +1,11 @@
 package jpabook.start;
 
-import javax.persistence.*;
-import java.util.List;
+import jpabook.start.domain.Order;
+import jpabook.start.domain.OrderMember;
 
-/**
- * @author holyeye
- */
+import javax.persistence.*;
+
+
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -35,28 +35,9 @@ public class JpaMain {
 
     public static void logic(EntityManager em) {
 
-        String id = "id1";
-        Member member = new Member();
-        member.setId(id);
-        member.setUsername("지한");
-        member.setAge(2);
-
-        //등록
-        em.persist(member);
-
-        //수정
-        member.setAge(20);
-
-        //한 건 조회
-        Member findMember = em.find(Member.class, id);
-        System.out.println("findMember=" + findMember.getUsername() + ", age=" + findMember.getAge());
-
-        //목록 조회
-        List<Member> members = em.createQuery("select m from Member m", Member.class).getResultList();
-        System.out.println("members.size=" + members.size());
-
-        //삭제
-        em.remove(member);
+        Order order=em.find(Order.class, 1L);
+        Long memberId=order.getMemberId();
+        OrderMember member=em.find(OrderMember.class, memberId);
 
     }
 }
