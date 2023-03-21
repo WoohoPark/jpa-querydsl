@@ -14,7 +14,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @Table(name = "ITEM")
-public class Item {
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "DTYPE")
+public abstract class Item {
 
     @Id
     @GeneratedValue
@@ -33,4 +35,5 @@ public class Item {
 
     @OneToMany(mappedBy = "item")
     private List<CategoryItem> categoryItems;
+
 }

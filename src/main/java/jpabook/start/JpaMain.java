@@ -15,7 +15,7 @@ public class JpaMain {
 
         try {
             tx.begin(); //트랜잭션 시작
-            before(em);  //비즈니스 로직
+            //before(em);  //비즈니스 로직
             //logic(em);
             tx.commit();//트랜잭션 커밋
         } catch (Exception e) {
