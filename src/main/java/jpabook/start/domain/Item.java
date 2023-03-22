@@ -33,7 +33,7 @@ public abstract class Item {
     @Column(name = "STOCK_QUANITY")
     private int stockQuanity;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL)
     private List<CategoryItem> categoryItems;
 
 }
